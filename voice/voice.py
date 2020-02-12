@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from cogs.utils.db import Connect
+from cogs.db import Connect
 import datetime
 import configparser
 
