@@ -137,4 +137,4 @@ class Rank(commands.Cog):
 
 def setup(bot):
 	bot.add_cog(Rank(bot))
-	print("[INFO] Ranked inside! v.0.1.0")
+	print("[INFO] Ranked loaded")
