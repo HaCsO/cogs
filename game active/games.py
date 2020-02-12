@@ -133,9 +133,6 @@ class GamesCog(commands.Cog, name='Games'):
 				break
 
 
-
-
-
 def setup(Bot):
 	Bot.add_cog(GamesCog(Bot))
-	print('[INFO] Games успешно загружен')
+	print('[INFO] Games loaded')
