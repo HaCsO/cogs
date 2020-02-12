@@ -1,8 +1,8 @@
 import discord
 import asyncio
 import configparser
+import discord
 from discord.ext import commands
-from discord.ext.commands import Bot
 
 class GamesCog(commands.Cog, name='Games'):
 	def __init__(self, Bot):
