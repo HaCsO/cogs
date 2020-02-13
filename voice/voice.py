@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from cogs.db import Connect
+from cogs.utils.db import Connect
 import datetime
 import configparser
 
@@ -21,6 +21,15 @@ class Voice(commands.Cog):
 				id = int(cfg['ROLES'][f'role{i}'])
 				prise = int(cfg['PRISE'][f'role{i}'])
 				self.roles[f'role{i}'] = {'id': f'{id}', 'prise': prise}
+				
+	@commands.Cog.listener()
+	async def on_message(self, msg):
+		pass
+
+	@commands.Cog.listener()
+	async def on_member_join(self, member):
+		role = discord.utils.get(member.guild.roles, id=487691377346347009)
+		await member.add_roles(role)
 				
 	@commands.Cog.listener()
 	async def on_voice_state_update(self, member, before, after):
@@ -62,9 +71,12 @@ class Voice(commands.Cog):
 
 				if maxRole:
 					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
-					await member.add_roles(role)
+					if role in member.roles:
+						pass
+					else:
+						await member.add_roles(role)
+						await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 
-					await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 				cur.execute(f"INSERT INTO users(id, voiceTime) VALUES ({member.id}, {timedelta.total_seconds()})")
 				db.commit()
 			else:
@@ -81,13 +93,13 @@ class Voice(commands.Cog):
 
 				if maxRole:
 					role = discord.utils.get(member.guild.roles, id=int(self.roles[maxRole]['id']))
-					if maxRoleN != 0:
-						roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))
-				
-						await member.remove_roles(roleOld)
-	
-					await member.add_roles(role)
-					await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
+					if role in member.roles:
+						pass
+						if maxRoleN != 0:
+							roleOld = discord.utils.get(member.guild.roles, id=int(self.roles[f"role{maxRoleN}"]['id']))			
+							await member.remove_roles(roleOld)
+						await member.add_roles(role)
+						await member.send(f"{member.mention} поздравляю! Ты достиг роли `{role.name}`!")
 
 
 				cur.execute(f"UPDATE users SET voiceTime = {timeNew.total_seconds()} WHERE id = {member.id}")
@@ -157,4 +169,4 @@ class Voice(commands.Cog):
 
 def setup(bot):
 	bot.add_cog(Voice(bot))
-	print("[INFO] Voice loaded")
+	print("[INFO] Voice loaded!")
